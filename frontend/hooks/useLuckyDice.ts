@@ -266,7 +266,7 @@ export const useLuckyDice = ({
       const hitJackpot =
         jackpotRaw === true ||
         jackpotRaw === "true" ||
-        jackpotRaw === 1 ||
+        jackpotRaw === 1n ||
         jackpotRaw === "1";
 
       const decryptedRoll: DecryptedRoll = {
