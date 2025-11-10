@@ -18,7 +18,12 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider coolMode modalSize="compact" theme={darkTheme({ accentColor: "#7c3aed" })}>
+        <RainbowKitProvider 
+          coolMode 
+          modalSize="compact" 
+          theme={darkTheme({ accentColor: "#7c3aed" })}
+          locale="en-US"
+        >
           <InMemoryStorageProvider>{children}</InMemoryStorageProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
