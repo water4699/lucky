@@ -40,6 +40,7 @@ export function LuckyDiceApp() {
     // For other networks, try to extract the provider from ethersProvider
     if (ethersProvider) {
       // ethersProvider is a BrowserProvider, access its internal provider
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const internalProvider = (ethersProvider as any)._getConnection?.()?.provider;
       if (internalProvider) {
         return internalProvider;
@@ -47,7 +48,9 @@ export function LuckyDiceApp() {
     }
     
     // Fallback to window.ethereum
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (typeof window !== "undefined" && (window as any).ethereum) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (window as any).ethereum;
     }
     
