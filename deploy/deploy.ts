@@ -5,13 +5,17 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  const deployedFHECounter = await deploy("FHECounter", {
+  if (hre.network.name !== "hardhat") {
+    await hre.fhevm.initializeCLIApi();
+  }
+
+  const deployedLuckyDice = await deploy("LuckyDice", {
     from: deployer,
     log: true,
   });
 
-  console.log(`FHECounter contract: `, deployedFHECounter.address);
+  console.log(`LuckyDice contract: `, deployedLuckyDice.address);
 };
 export default func;
-func.id = "deploy_fheCounter"; // id required to prevent reexecution
-func.tags = ["FHECounter"];
+func.id = "deploy_lucky_dice"; // id required to prevent reexecution
+func.tags = ["LuckyDice"];

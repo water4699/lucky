@@ -1,110 +1,256 @@
-# FHEVM Hardhat Template
+# 🎲 Lucky Dice - Encrypted Lottery on FHEVM
 
-A Hardhat-based template for developing Fully Homomorphic Encryption (FHE) enabled Solidity smart contracts using the
-FHEVM protocol by Zama.
+An encrypted dice lottery game built with [Zama's FHEVM](https://docs.zama.ai/fhevm) (Fully Homomorphic Encryption Virtual Machine), demonstrating privacy-preserving smart contracts on Ethereum.
 
-## Quick Start
+## 🌟 Features
 
-For detailed instructions see:
-[FHEVM Hardhat Quick Start Tutorial](https://docs.zama.ai/protocol/solidity-guides/getting-started/quick-start-tutorial)
+- 🔒 **Fully Encrypted Dice Rolls**: Your dice choices are encrypted on-chain using FHEVM
+- 🎰 **Homomorphic Jackpot Detection**: Contract detects jackpots without decrypting individual rolls
+- 🎯 **Private Result Reveal**: Only authorized addresses can decrypt roll results
+- 🌐 **Multi-Network Support**: Works on both Hardhat local network and Sepolia testnet
+- ⚡ **Modern UI**: Beautiful React/Next.js frontend with RainbowKit wallet integration
+
+## 🎮 How It Works
+
+1. **Choose a dice value** (1-6) on the frontend
+2. **Encrypt locally** using FHEVM SDK in your browser
+3. **Submit to blockchain** - your choice stays encrypted on-chain
+4. **Homomorphic aggregation** - contract sums encrypted values without seeing them
+5. **Jackpot detection** - triggers when encrypted sum ≥ 18
+6. **Decrypt results** - only you can see your roll and check if you won
+
+### Game Rules
+
+- Roll a dice (1-6) and submit encrypted value
+- Each roll adds to the encrypted "rolling pot"
+- When pot reaches ≥18, **Jackpot!** 🎉
+- Pot resets and a new round begins
+- All operations happen on encrypted data
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js**: Version 20 or higher
-- **npm or yarn/pnpm**: Package manager
+- Node.js 18+
+- MetaMask or compatible wallet
+- (Optional) Sepolia ETH for testnet deployment
 
-### Installation
+### Local Development
 
-1. **Install dependencies**
+1. **Clone the repository**
+```bash
+git clone https://github.com/waeter469/lucky.git
+cd lucky
+```
 
-   ```bash
-   npm install
-   ```
+2. **Install dependencies**
+```bash
+npm install
+cd frontend
+npm install
+cd ..
+```
 
-2. **Set up environment variables**
+3. **Start local network**
+```bash
+# Option 1: Use the automated script (Windows)
+.\restart-services.bat
 
-   ```bash
-   npx hardhat vars set MNEMONIC
+# Option 2: Manual steps
+# Terminal 1: Start Hardhat node
+npx hardhat node
 
-   # Set your Infura API key for network access
-   npx hardhat vars set INFURA_API_KEY
+# Terminal 2: Deploy contracts
+npx hardhat deploy --network localhost
 
-   # Optional: Set Etherscan API key for contract verification
-   npx hardhat vars set ETHERSCAN_API_KEY
-   ```
+# Terminal 3: Start frontend
+cd frontend
+npm run dev
+```
 
-3. **Compile and test**
+4. **Configure MetaMask**
+- Network: Hardhat Local
+- RPC URL: `http://localhost:8545`
+- Chain ID: `31337`
+- Currency: ETH
 
-   ```bash
-   npm run compile
-   npm run test
-   ```
+5. **Import test account**
+```
+Address: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
 
-4. **Deploy to local network**
-
-   ```bash
-   # Start a local FHEVM-ready node
-   npx hardhat node
-   # Deploy to local network
-   npx hardhat deploy --network localhost
-   ```
-
-5. **Deploy to Sepolia Testnet**
-
-   ```bash
-   # Deploy to Sepolia
-   npx hardhat deploy --network sepolia
-   # Verify contract on Etherscan
-   npx hardhat verify --network sepolia <CONTRACT_ADDRESS>
-   ```
-
-6. **Test on Sepolia Testnet**
-
-   ```bash
-   # Once deployed, you can run a simple test on Sepolia.
-   npx hardhat test --network sepolia
-   ```
+6. **Open the app**
+```
+http://localhost:3000
+```
 
 ## 📁 Project Structure
 
 ```
-fhevm-hardhat-template/
-├── contracts/           # Smart contract source files
-│   └── FHECounter.sol   # Example FHE counter contract
-├── deploy/              # Deployment scripts
-├── tasks/               # Hardhat custom tasks
-├── test/                # Test files
-├── hardhat.config.ts    # Hardhat configuration
-└── package.json         # Dependencies and scripts
+lucky/
+├── contracts/          # Solidity contracts
+│   └── LuckyDice.sol  # Main lottery contract with FHEVM
+├── frontend/          # Next.js frontend
+│   ├── app/          # App pages and layouts
+│   ├── components/   # React components
+│   ├── hooks/        # Custom React hooks
+│   ├── fhevm/        # FHEVM SDK integration
+│   └── abi/          # Auto-generated contract ABIs
+├── deploy/           # Deployment scripts
+├── test/            # Contract tests
+├── tasks/           # Hardhat tasks
+└── docs/            # Documentation (Chinese)
+    ├── 本地运行指南.md
+    ├── MetaMask配置指南.md
+    ├── Sepolia测试网使用指南.md
+    └── ...more guides
 ```
 
-## 📜 Available Scripts
+## 🔧 Available Scripts
 
-| Script             | Description              |
-| ------------------ | ------------------------ |
-| `npm run compile`  | Compile all contracts    |
-| `npm run test`     | Run all tests            |
-| `npm run coverage` | Generate coverage report |
-| `npm run lint`     | Run linting checks       |
-| `npm run clean`    | Clean build artifacts    |
+### Backend (Hardhat)
 
-## 📚 Documentation
+```bash
+# Compile contracts
+npx hardhat compile
 
-- [FHEVM Documentation](https://docs.zama.ai/fhevm)
-- [FHEVM Hardhat Setup Guide](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup)
-- [FHEVM Testing Guide](https://docs.zama.ai/protocol/solidity-guides/development-guide/hardhat/write_test)
-- [FHEVM Hardhat Plugin](https://docs.zama.ai/protocol/solidity-guides/development-guide/hardhat)
+# Run tests
+npx hardhat test
+
+# Deploy to local network
+npx hardhat deploy --network localhost
+
+# Deploy to Sepolia
+npx hardhat deploy --network sepolia
+
+# Run Hardhat node
+npx hardhat node
+```
+
+### Frontend (Next.js)
+
+```bash
+cd frontend
+
+# Development server
+npm run dev
+
+# Production build
+npm run build
+
+# Start production server
+npm start
+
+# Generate contract ABIs
+npm run genabi
+```
+
+## 🌐 Networks
+
+### Hardhat Local (Development)
+
+- **Chain ID**: 31337
+- **RPC**: http://localhost:8545
+- **FHEVM**: Mock mode (instant, no external dependencies)
+- **Best for**: Development and testing
+
+### Sepolia Testnet (Public Testing)
+
+- **Chain ID**: 11155111
+- **Contract**: `0x1a84Ec39BA9480D67740B37bD1aFdE4fEA904A3c`
+- **FHEVM**: Zama RelayerSDK (requires internet connection)
+- **Faucet**: https://sepoliafaucet.com/
+- **Best for**: Public demos and collaborative testing
+
+## 🎯 Key Technologies
+
+- **Smart Contracts**: Solidity + FHEVM
+- **Frontend**: Next.js 15 + React 19 + TypeScript
+- **Wallet Integration**: RainbowKit + Wagmi
+- **Encryption**: Zama FHEVM SDK
+- **Styling**: Tailwind CSS
+- **Development**: Hardhat + TypeChain
+
+## 📖 Documentation
+
+Comprehensive guides available (in Chinese):
+
+- [本地运行指南.md](./本地运行指南.md) - Local setup guide
+- [MetaMask配置指南.md](./MetaMask配置指南.md) - MetaMask configuration
+- [Sepolia测试网使用指南.md](./Sepolia测试网使用指南.md) - Sepolia testnet guide
+- [如何导入测试账户到MetaMask.md](./如何导入测试账户到MetaMask.md) - Import test accounts
+- [切换到本地网络.md](./切换到本地网络.md) - Switch networks guide
+
+## 🔒 Security & Privacy
+
+### What's Encrypted?
+
+- ✅ Dice roll values (1-6)
+- ✅ Rolling pot sum
+- ✅ Jackpot detection flags
+
+### What's Public?
+
+- ⚠️ Player addresses
+- ⚠️ Transaction timestamps
+- ⚠️ Roll counts
+
+### Key Privacy Features
+
+1. **On-chain encryption**: Dice values never appear in cleartext on blockchain
+2. **Homomorphic operations**: Contract can compute on encrypted data
+3. **Selective decryption**: Only authorized addresses can decrypt results
+4. **Access control**: Fine-grained permissions for viewing encrypted data
+
+## 🧪 Testing
+
+### Run All Tests
+
+```bash
+npx hardhat test
+```
+
+### Test on Sepolia
+
+```bash
+npx hardhat test --network sepolia
+```
+
+### Test Coverage
+
+The project includes comprehensive tests for:
+- Contract deployment and initialization
+- Encrypted roll submission
+- Jackpot detection and pot reset
+- Access control and permissions
+- Decryption functionality
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-This project is licensed under the BSD-3-Clause-Clear License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the BSD-3-Clause-Clear License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## 🙏 Acknowledgments
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/zama-ai/fhevm/issues)
-- **Documentation**: [FHEVM Docs](https://docs.zama.ai)
-- **Community**: [Zama Discord](https://discord.gg/zama)
+- [Zama](https://www.zama.ai/) for FHEVM technology
+- [Hardhat](https://hardhat.org/) for development environment
+- [RainbowKit](https://www.rainbowkit.com/) for wallet integration
+- Original template from [fhevm-hardhat-template](https://github.com/zama-ai/fhevm-hardhat-template)
+
+## 📞 Support
+
+- **Issues**: https://github.com/waeter469/lucky/issues
+- **Zama Docs**: https://docs.zama.ai/fhevm
+- **Zama Discord**: https://discord.com/invite/fhe-org
+
+## 🎲 Try It Now!
+
+Visit our live demo (when deployed) or run locally to experience encrypted lottery gaming with FHEVM!
 
 ---
 
-**Built with ❤️ by the Zama team**
+**Built with ❤️ and 🔐 by waeter469**
